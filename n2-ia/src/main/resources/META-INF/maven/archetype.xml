@@ -1,0 +1,9 @@
+<archetype>
+  <id>n2-ia</id>
+  <sources>
+    <source>src/main/java/astar.AStar.java</source>
+  </sources>
+  <testSources>
+    <source>src/test/java/AppTest.java</source>
+  </testSources>
+</archetype>
