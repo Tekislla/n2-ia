@@ -1,10 +1,13 @@
 package general;
 
 public class Edge {
-    private Node target;
-    private double distance;
+    public Node target;
+    public double distance;
 
     public Edge(Node target, double distance) {
+        if (target == null) {
+            throw new IllegalArgumentException("Destino da aresta não pode ser nulo.");
+        }
         this.target = target;
         this.distance = distance;
     }

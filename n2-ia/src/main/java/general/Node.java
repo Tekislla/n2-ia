@@ -34,6 +34,14 @@ public class Node {
         return edges;
     }
 
+    public List<Node> getEdgeTargets() {
+        List<Node> targets = new ArrayList<>();
+        for (Edge edge : edges) {
+            targets.add(edge.getTarget());
+        }
+        return targets;
+    }
+
     public void addEdge(Node target, double distance) {
         Edge edge = new Edge(target, distance);
         edges.add(edge);
@@ -50,36 +58,14 @@ public class Node {
     }
 
     public double getDistance(Node neighbor) {
-        double lat1 = this.latitude;
-        double lon1 = this.longitude;
-        double lat2 = neighbor.getLatitude();
-        double lon2 = neighbor.getLongitude();
+        double distance = 0;
 
-        double distance = Math.sqrt(Math.pow(lat1 - lat2, 2) + Math.pow(lon1 - lon2, 2));
+        for (Edge edge : neighbor.edges) {
+            if(edge.target.name == this.name) {
+                distance = edge.distance;
+            }
+        }
+
         return distance;
-    }
-
-    public double getGScore() {
-        return gScore;
-    }
-
-    public void setGScore(double gScore) {
-        this.gScore = gScore;
-    }
-
-    public double getFScore() {
-        return fScore;
-    }
-
-    public void setFScore(double fScore) {
-        this.fScore = fScore;
-    }
-
-    public Node getCameFrom() {
-        return cameFrom;
-    }
-
-    public void setCameFrom(Node cameFrom) {
-        this.cameFrom = cameFrom;
     }
 }

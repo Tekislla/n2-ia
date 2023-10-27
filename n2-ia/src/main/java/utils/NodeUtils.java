@@ -3,115 +3,119 @@ package utils;
 import general.Node;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NodeUtils {
 
-    static Node rioDeJaneiro = new Node("Rio de Janeiro", -22.9068, -43.1729);
-    static Node saoPaulo = new Node("São Paulo", -23.5505, -46.6333);
-    static Node beloHorizonte = new Node("Belo Horizonte", -19.9167, -43.9345);
-    static Node brasilia = new Node("Brasília", -15.7801, -47.9292);
-    static Node salvador = new Node("Salvador", -12.9716, -38.5016);
-    static Node recife = new Node("Recife", -8.0476, -34.8770);
-    static Node fortaleza = new Node("Fortaleza", -3.7172, -38.5433);
-    static Node curitiba = new Node("Curitiba", -25.4275, -49.2731);
-    static Node portoAlegre = new Node("Porto Alegre", -30.0277, -51.2287);
-    static Node manaus = new Node("Manaus", -3.1190, -60.0217);
-    static Node belem = new Node("Belém", -1.4550, -48.5023);
-    static Node goiania = new Node("Goiânia", -16.6809, -49.2533);
-    static Node cuiaba = new Node("Cuiabá", -15.6010, -56.0974);
-    static Node natal = new Node("Natal", -5.7945, -35.2110);
-    static Node florianopolis = new Node("Florianópolis", -27.5954, -48.5480);
-    static Node portoVelho = new Node("Porto Velho", -8.7619, -63.9034);
-    static Node boaVista = new Node("Boa Vista", 2.8235, -60.6758);
+    private static Map<String, Node> cityMap = new HashMap<>();
 
+    public static void initializeData() {
+        initializeCities();
+        addEdges();
+    }
+    public static void initializeCities() {
+        cityMap.put("Rio de Janeiro", new Node("Rio de Janeiro", -22.9068, -43.1729));
+        cityMap.put("São Paulo", new Node("São Paulo", -23.5505, -46.6333));
+        cityMap.put("Belo Horizonte", new Node("Belo Horizonte", -19.9167, -43.9345));
+        cityMap.put("Brasília", new Node("Brasília", -15.7801, -47.9292));
+        cityMap.put("Salvador", new Node("Salvador", -12.9716, -38.5016));
+        cityMap.put("Recife", new Node("Recife", -8.0476, -34.8770));
+        cityMap.put("Fortaleza", new Node("Fortaleza", -3.7172, -38.5433));
+        cityMap.put("Curitiba", new Node("Curitiba", -25.4275, -49.2731));
+        cityMap.put("Porto Alegre", new Node("Porto Alegre", -30.0277, -51.2287));
+        cityMap.put("Manaus", new Node("Manaus", -3.1190, -60.0217));
+        cityMap.put("Belém", new Node("Belém", -1.4550, -48.5023));
+        cityMap.put("Goiânia", new Node("Goiânia", -16.6809, -49.2533));
+        cityMap.put("Cuiabá", new Node("Cuiabá", -15.6010, -56.0974));
+        cityMap.put("Natal", new Node("Natal", -5.7945, -35.2110));
+        cityMap.put("Florianópolis", new Node("Florianópolis", -27.5954, -48.5480));
+        cityMap.put("Porto Velho", new Node("Porto Velho", -8.7619, -63.9034));
+        cityMap.put("Boa Vista", new Node("Boa Vista", 2.8235, -60.6758));
+        cityMap.put("Maringá", new Node("Maringá", -23.4323, -51.9375));
+        cityMap.put("Cascavel", new Node("Cascavel", -24.9578, -53.4590));
+        cityMap.put("Campo Grande", new Node("Campo Grande", -20.4697, -54.6201));
+        cityMap.put("Feira de Santana", new Node("Feira de Santana", -12.2733, -38.9556));
+    }
 
     public static void addEdges() {
-        rioDeJaneiro.addEdge(saoPaulo, 429.1);
-        rioDeJaneiro.addEdge(beloHorizonte, 339.0);
-        saoPaulo.addEdge(beloHorizonte, 584.3);
-        saoPaulo.addEdge(curitiba, 408.7);
-        saoPaulo.addEdge(rioDeJaneiro, 429.1);
-        beloHorizonte.addEdge(rioDeJaneiro, 339.0);
-        beloHorizonte.addEdge(saoPaulo, 584.3);
-        beloHorizonte.addEdge(brasilia, 621.7);
-        brasilia.addEdge(beloHorizonte, 621.7);
-        brasilia.addEdge(goiania, 209.3);
-        brasilia.addEdge(cuiaba, 1113.3);
-        salvador.addEdge(recife, 824.4);
-        recife.addEdge(salvador, 824.4);
-        recife.addEdge(fortaleza, 806.3);
-        fortaleza.addEdge(recife, 806.3);
-        fortaleza.addEdge(natal, 515.3);
-        curitiba.addEdge(saoPaulo, 408.7);
-        curitiba.addEdge(portoAlegre, 709.8);
-        portoAlegre.addEdge(curitiba, 709.8);
-        portoAlegre.addEdge(florianopolis, 476.7);
-        manaus.addEdge(portoVelho, 682.2);
-        manaus.addEdge(boaVista, 777.3);
-        belem.addEdge(manaus, 2116.3);
+        cityMap.get("Rio de Janeiro").addEdge(cityMap.get("São Paulo"), 429.1);
+        cityMap.get("Rio de Janeiro").addEdge(cityMap.get("Belo Horizonte"), 339.0);
+
+        cityMap.get("São Paulo").addEdge(cityMap.get("Belo Horizonte"), 584.3);
+        cityMap.get("São Paulo").addEdge(cityMap.get("Curitiba"), 408.7);
+        cityMap.get("São Paulo").addEdge(cityMap.get("Rio de Janeiro"), 429.1);
+
+        cityMap.get("Belo Horizonte").addEdge(cityMap.get("Rio de Janeiro"), 339.0);
+        cityMap.get("Belo Horizonte").addEdge(cityMap.get("São Paulo"), 584.3);
+        cityMap.get("Belo Horizonte").addEdge(cityMap.get("Brasília"), 621.7);
+        cityMap.get("Belo Horizonte").addEdge(cityMap.get("Feira de Santana"), 1236);
+
+        cityMap.get("Brasília").addEdge(cityMap.get("Belo Horizonte"), 621.7);
+        cityMap.get("Brasília").addEdge(cityMap.get("Goiânia"), 209.3);
+        cityMap.get("Brasília").addEdge(cityMap.get("Cuiabá"), 1113.3);
+
+        cityMap.get("Salvador").addEdge(cityMap.get("Recife"), 824.4);
+        cityMap.get("Salvador").addEdge(cityMap.get("Feira de Santana"), 115);
+
+        cityMap.get("Feira de Santana").addEdge(cityMap.get("Salvador"), 115);
+        cityMap.get("Feira de Santana").addEdge(cityMap.get("Belo Horizonte"), 1236);
+
+        cityMap.get("Recife").addEdge(cityMap.get("Salvador"), 824.4);
+        cityMap.get("Recife").addEdge(cityMap.get("Fortaleza"), 806.3);
+
+        cityMap.get("Fortaleza").addEdge(cityMap.get("Recife"), 806.3);
+        cityMap.get("Fortaleza").addEdge(cityMap.get("Natal"), 515.3);
+
+        cityMap.get("Curitiba").addEdge(cityMap.get("São Paulo"), 408.7);
+        cityMap.get("Curitiba").addEdge(cityMap.get("Florianópolis"), 315);
+
+        cityMap.get("Florianópolis").addEdge(cityMap.get("Curitiba"), 315);
+        cityMap.get("Florianópolis").addEdge(cityMap.get("Porto Alegre"), 476.7);
+
+        cityMap.get("Porto Alegre").addEdge(cityMap.get("Florianópolis"), 476.7);
+        cityMap.get("Manaus").addEdge(cityMap.get("Porto Velho"), 682.2);
+        cityMap.get("Manaus").addEdge(cityMap.get("Boa Vista"), 777.3);
+        cityMap.get("Belém").addEdge(cityMap.get("Manaus"), 2116.3);
+        cityMap.get("Maringá").addEdge(cityMap.get("Cascavel"), 168.8);
+        cityMap.get("Maringá").addEdge(cityMap.get("São Paulo"), 631.3);
+        cityMap.get("Maringá").addEdge(cityMap.get("Curitiba"), 420);
+        cityMap.get("Maringá").addEdge(cityMap.get("Campo Grande"), 558);
+        cityMap.get("Cascavel").addEdge(cityMap.get("Maringá"), 168.8);
+        cityMap.get("Cascavel").addEdge(cityMap.get("Campo Grande"), 633.7);
+        cityMap.get("Cascavel").addEdge(cityMap.get("Curitiba"), 502);
+        cityMap.get("Campo Grande").addEdge(cityMap.get("Cascavel"), 633);
+        cityMap.get("Campo Grande").addEdge(cityMap.get("São Paulo"), 987.8);
+        cityMap.get("Campo Grande").addEdge(cityMap.get("Maringá"), 558);
     }
 
     public static List<Node> getListForGraph() {
-        List<Node> list = new ArrayList<>();
-        addEdges();
-
-        list.add(rioDeJaneiro);
-        list.add(saoPaulo);
-        list.add(beloHorizonte);
-        list.add(brasilia);
-        list.add(salvador);
-        list.add(recife);
-        list.add(fortaleza);
-        list.add(curitiba);
-        list.add(portoAlegre);
-        list.add(manaus);
-        list.add(belem);
-        list.add(goiania);
-        list.add(cuiaba);
-        list.add(natal);
-        list.add(florianopolis);
-        list.add(portoVelho);
-        list.add(boaVista);
-
-        return list;
-    }
-
-    public static List<Node> getEasyListToVisit() {
-        List<Node> list = new ArrayList<>();
-        addEdges();
-
-        list.add(portoAlegre);
-        list.add(rioDeJaneiro);
-
-        return list;
+        if (cityMap.isEmpty()) {
+            initializeData();
+        }
+        return new ArrayList<>(cityMap.values());
     }
 
     public static List<Node> getNodesForGraph() {
-        List<Node> list = getListForGraph();
-
-        return list;
+        return getListForGraph();
     }
 
     public static List<Node> getNodesToVisit() {
-        List<Node> list = getEasyListToVisit();
+        if (cityMap.isEmpty())
+            initializeData();
 
+        List<Node> list = new ArrayList<>();
+        list.add(cityMap.get("Porto Alegre"));
+        list.add(cityMap.get("Rio de Janeiro"));
         return list;
     }
 
-    public static Node findByName(List<Node> list, String name) {
-        Node retorno = null;
-        for (Node node : list) {
-            if (node.getName().equals(name)) {
-                retorno = node;
-            }
-        }
+    public static Node findByName(String name) {
+        Node city = cityMap.get(name);
+        if (city == null)
+            throw new RuntimeException("City not found!");
 
-        if (retorno == null) {
-            throw new RuntimeException("Cidade não encontrada!");
-        }
-
-        return retorno;
+        return city;
     }
-
 }
