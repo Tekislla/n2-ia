@@ -1,4 +1,4 @@
-package astar;
+package general;
 
 public class Edge {
     private Node target;

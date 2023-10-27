@@ -1,4 +1,4 @@
-package astar;
+package general;
 
 import java.util.*;
 
@@ -40,25 +40,21 @@ public class Node {
     }
 
     public double getHeuristic(Node end) {
-        // Calcula a distância Euclidiana entre as coordenadas deste nó e o nó de destino.
         double lat1 = this.latitude;
         double lon1 = this.longitude;
         double lat2 = end.getLatitude();
         double lon2 = end.getLongitude();
 
-        // Fórmula da distância Euclidiana
         double distance = Math.sqrt(Math.pow(lat1 - lat2, 2) + Math.pow(lon1 - lon2, 2));
         return distance;
     }
 
     public double getDistance(Node neighbor) {
-        // Calcula a distância Euclidiana entre as coordenadas deste nó e o vizinho.
         double lat1 = this.latitude;
         double lon1 = this.longitude;
         double lat2 = neighbor.getLatitude();
         double lon2 = neighbor.getLongitude();
 
-        // Fórmula da distância Euclidiana
         double distance = Math.sqrt(Math.pow(lat1 - lat2, 2) + Math.pow(lon1 - lon2, 2));
         return distance;
     }

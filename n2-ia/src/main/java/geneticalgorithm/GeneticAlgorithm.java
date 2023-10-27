@@ -1,7 +1,9 @@
 package geneticalgorithm;
 
-import astar.Graph;
-import astar.Node;
+import Utils.NodeUtils;
+import general.Edge;
+import general.Graph;
+import general.Node;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,35 +11,68 @@ import java.util.List;
 import java.util.Random;
 
 public class GeneticAlgorithm {
-    public static List<Node> findOptimalRoute(Graph graph, int populationSize, int generations) {
-        // Inicialize uma população aleatória de rotas.
-        List<List<Node>> population = initializePopulation(graph, populationSize);
+
+    static int iterations = 0;
+    static int nodeChecks = 0;
+    static int changes = 0;
+    static int distance = 0;
+
+    public static void main(String[] args) {
+        Graph graph = new Graph();
+
+        List<Node> nodesToVisit = NodeUtils.getNodesToVisit();
+        List<Node> nodesForGraph = NodeUtils.getNodesForGraph();
+        nodesForGraph.forEach(graph::addNode);
+
+        int populationSize = 1000;
+        int generations = 1000;
+
+        long startTime = System.currentTimeMillis();
+        List<Node> bestRoute = GeneticAlgorithm.findOptimalRoute(graph, NodeUtils.findByName(nodesForGraph, "São Paulo"), nodesToVisit, populationSize, generations);
+
+        if (bestRoute != null) {
+            System.out.println("Rota mais eficiente encontrada:");
+            for (Node city : bestRoute) {
+                for (Edge edge : city.getEdges()) {
+                    distance += edge.getDistance();
+                }
+                System.out.println(city.getName());
+            }
+            long endTime = System.currentTimeMillis();
+            long runtime = endTime - startTime;
+
+            System.out.println("Número de Iterações: " + iterations);
+            System.out.println("Número de Verificações: " + nodeChecks);
+            System.out.println("Número de Trocas: " + changes);
+            System.out.println("Tempo de Execução (ms): " + runtime);
+            System.out.println("Distância: " + distance + "km");
+        } else {
+            System.out.println("Não foi possível encontrar uma rota eficiente.");
+        }
+    }
+
+    public static List<Node> findOptimalRoute(Graph graph, Node startPoint, List<Node> nodesToVisit, int populationSize, int generations) {
+        List<List<Node>> population = initializePopulation(graph, populationSize, nodesToVisit);
 
         for (int generation = 0; generation < generations; generation++) {
-            // Avalie a aptidão de cada rota na população.
             List<RouteFitness> routeFitnessList = evaluatePopulation(population);
-
-            // Selecione as melhores rotas com base na aptidão.
             List<List<Node>> selectedRoutes = selectRoutes(routeFitnessList, populationSize);
-
-            // Aplique operadores de cruzamento (crossover) para criar novas rotas.
             List<List<Node>> newPopulation = crossover(selectedRoutes);
 
-            // Aplique operadores de mutação para introduzir variação.
             mutatePopulation(newPopulation);
 
             population = newPopulation;
         }
 
-        // Retorne a melhor rota encontrada após todas as gerações.
-        return getBestRoute(population, graph);
+        return getBestRoute(population, startPoint);
     }
 
-    private static List<List<Node>> initializePopulation(Graph graph, int populationSize) {
+
+    private static List<List<Node>> initializePopulation(Graph graph, int populationSize, List<Node> nodesToVisit) {
         List<List<Node>> population = new ArrayList<>();
 
         for (int i = 0; i < populationSize; i++) {
-            List<Node> randomRoute = new ArrayList<>(graph.getNodes());
+            List<Node> randomRoute = new ArrayList<>(nodesToVisit);
             Collections.shuffle(randomRoute);
             population.add(randomRoute);
         }
@@ -46,7 +81,7 @@ public class GeneticAlgorithm {
     }
 
     private static List<RouteFitness> evaluatePopulation(List<List<Node>> population) {
-        List<RouteFitness> routeFitnessList = new ArrayList<>();
+        List<RouteFitness> routeFitnessList = new ArrayList();
 
         for (List<Node> route : population) {
             double totalDistance = calculateTotalDistance(route);
@@ -72,41 +107,39 @@ public class GeneticAlgorithm {
 
     private static List<List<Node>> crossover(List<List<Node>> selectedRoutes) {
         List<List<Node>> newPopulation = new ArrayList<>();
+        iterations++;
         Random random = new Random();
 
         while (selectedRoutes.size() >= 2) {
             List<Node> parent1 = selectedRoutes.remove(random.nextInt(selectedRoutes.size()));
             List<Node> parent2 = selectedRoutes.remove(random.nextInt(selectedRoutes.size()));
 
-            // Escolha pontos de corte aleatórios para crossover.
             int crossoverPoint1 = random.nextInt(parent1.size());
             int crossoverPoint2 = random.nextInt(parent1.size());
 
             int start = Math.min(crossoverPoint1, crossoverPoint2);
             int end = Math.max(crossoverPoint1, crossoverPoint2);
 
-            // Realize o crossover trocando as seções entre os pontos de corte.
             List<Node> child1 = new ArrayList<>(parent1.subList(start, end));
             List<Node> child2 = new ArrayList<>(parent2.subList(start, end));
 
-            // Preencha os filhos com os genes dos pais não selecionados.
             for (Node city : parent2) {
                 if (!child1.contains(city)) {
+                    changes++;
                     child1.add(city);
                 }
             }
             for (Node city : parent1) {
                 if (!child2.contains(city)) {
+                    changes++;
                     child2.add(city);
                 }
             }
 
-            // Adicione os filhos à nova população.
             newPopulation.add(child1);
             newPopulation.add(child2);
         }
 
-        // Adicione qualquer rota restante que não pôde ser emparelhada.
         newPopulation.addAll(selectedRoutes);
 
         return newPopulation;
@@ -130,41 +163,30 @@ public class GeneticAlgorithm {
         for (int i = 0; i < route.size() - 1; i++) {
             totalDistance += route.get(i).getDistance(route.get(i + 1));
         }
-        totalDistance += route.get(route.size() - 1).getDistance(route.get(0)); // Volte ao ponto de partida.
+        totalDistance += route.get(route.size() - 1).getDistance(route.get(0));
         return totalDistance;
     }
 
-    private static List<Node> getBestRoute(List<List<Node>> population, Graph graph) {
+    private static List<Node> getBestRoute(List<List<Node>> population, Node startPoint) {
         List<Node> bestRoute = null;
         double bestDistance = Double.POSITIVE_INFINITY;
 
         for (List<Node> route : population) {
             double totalDistance = calculateTotalDistance(route);
+
+            // Adicionando a distância de volta ao ponto de partida
+            totalDistance += startPoint.getDistance(route.get(0));
+
             if (totalDistance < bestDistance) {
                 bestRoute = route;
                 bestDistance = totalDistance;
             }
         }
 
+        // Adicionando o ponto de partida no início da melhor rota
+        bestRoute.add(0, startPoint);
+
         return bestRoute;
     }
 
-    private static class RouteFitness implements Comparable<RouteFitness> {
-        private List<Node> route;
-        private double distance;
-
-        public RouteFitness(List<Node> route, double distance) {
-            this.route = route;
-            this.distance = distance;
-        }
-
-        public List<Node> getRoute() {
-            return route;
-        }
-
-        @Override
-        public int compareTo(RouteFitness other) {
-            return Double.compare(this.distance, other.distance);
-        }
-    }
 }
