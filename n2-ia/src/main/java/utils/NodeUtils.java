@@ -106,8 +106,10 @@ public class NodeUtils {
             initializeData();
 
         List<Node> list = new ArrayList<>();
+        list.add(cityMap.get("São Paulo"));
         list.add(cityMap.get("Porto Alegre"));
-        list.add(cityMap.get("Rio de Janeiro"));
+        list.add(cityMap.get("Belo Horizonte"));
+
         return list;
     }
 

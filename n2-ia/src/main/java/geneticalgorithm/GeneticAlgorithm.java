@@ -81,7 +81,7 @@ public class GeneticAlgorithm {
 
         for (int i = 0; i < populationSize; i++) {
             List<Node> randomRoute = new ArrayList<>();
-            randomRoute.add(startPoint); // Adiciono o ponto de partida no início da rota
+            randomRoute.add(startPoint);
 
             Node currentNode = startPoint;
             List<Node> unvisitedDestinations = new ArrayList<>(destinations);
@@ -89,7 +89,6 @@ public class GeneticAlgorithm {
             while (!unvisitedDestinations.isEmpty()) {
                 Node nextNode = getRandomNeighbor(graph, currentNode, currentNode.getEdgeTargets());
                 if (nextNode == null) {
-                    // Se não houver mais vizinhos não visitados, volte para o ponto de partida
                     nextNode = startPoint;
                 }
                 randomRoute.add(nextNode);
@@ -135,7 +134,6 @@ public class GeneticAlgorithm {
     }
 
     private static boolean areConnected(Graph graph, Node node1, Node node2) {
-        // Verifique se existe uma aresta entre node1 e node2.
         for (Edge edge : node1.getEdges()) {
             if (edge.getTarget() == node2) {
                 return true;
@@ -170,7 +168,6 @@ public class GeneticAlgorithm {
             List<Node> child1 = new ArrayList<>();
             List<Node> child2 = new ArrayList<>();
 
-            // Create children using the single-point crossover
             for (int i = 0; i < routeSize; i++) {
                 if (i < crossoverPoint) {
                     child1.add(parent1.get(i));
@@ -244,7 +241,6 @@ public class GeneticAlgorithm {
                 double totalDistance = calculateTotalDistance(route);
 
                 if (route.size() >= 2) {
-                    // Adicionando a distância de volta ao ponto de partida
                     totalDistance += startPoint.getDistance(route.get(1));
                 }
 
@@ -256,7 +252,6 @@ public class GeneticAlgorithm {
         }
 
         if (bestRoute != null) {
-            // Adicionando o ponto de partida no início da melhor rota
             bestRoute.add(0, startPoint);
         }
 
