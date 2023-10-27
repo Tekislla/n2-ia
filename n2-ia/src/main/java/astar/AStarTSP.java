@@ -18,7 +18,7 @@ public class AStarTSP {
         List<Node> nodes = NodeUtils.getNodesForGraph();
         nodes.forEach(graph::addNode);
 
-        Node startNode = NodeUtils.findByName(nodes, "Belém");
+        Node startNode = new Node("Rio de Janeiro", 1, 5);
 
         long startTime = System.currentTimeMillis();
         List<Node> path = findPath(graph, startNode);
