@@ -1,6 +1,6 @@
 package astar;
 
-import Utils.NodeUtils;
+import utils.NodeUtils;
 import general.Graph;
 import general.Node;
 

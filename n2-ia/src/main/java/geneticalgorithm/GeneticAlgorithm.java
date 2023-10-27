@@ -1,6 +1,6 @@
 package geneticalgorithm;
 
-import Utils.NodeUtils;
+import utils.NodeUtils;
 import general.Edge;
 import general.Graph;
 import general.Node;
