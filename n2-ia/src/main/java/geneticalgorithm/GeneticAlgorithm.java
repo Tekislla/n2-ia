@@ -66,9 +66,11 @@ public class GeneticAlgorithm {
         for (int generation = 0; generation < generations; generation++) {
             List<RouteFitness> routeFitnessList = evaluatePopulation(population);
             List<List<Node>> selectedRoutes = selectRoutes(routeFitnessList, populationSize);
+            iterations++;
             //List<List<Node>> newPopulation = singlePointCrossover(selectedRoutes);
 
             //mutatePopulation(newPopulation);
+            changes++;
 
             population = selectedRoutes;
         }
@@ -87,6 +89,7 @@ public class GeneticAlgorithm {
             List<Node> unvisitedDestinations = new ArrayList<>(destinations);
 
             while (!unvisitedDestinations.isEmpty()) {
+                nodeChecks++;
                 Node nextNode = getRandomNeighbor(graph, currentNode, currentNode.getEdgeTargets());
                 if (nextNode == null) {
                     nextNode = startPoint;
